@@ -1,0 +1,12 @@
+filebeat.inputs:
+    - type: log
+      enabled: true
+      paths:
+        - /var/log/nginx/*.log
+    setup.ilm.enabled: false
+    setup.template:
+      name: "filebeat"
+      pattern: "filebeat-*"
+    output.elasticsearch:
+      hosts: ["xxx.xxx.xxx.xxx:9200"]
+      index: "custom-%{+yyyy.MM.dd}"
