@@ -52,7 +52,7 @@
                 include /etc/nginx/default.d/*.conf;
         
                 location / {
-                    root   /opt/ss-web;
+                    root   /opt/vue/dist;
                     index  index.html;
                     try_files $uri $uri/ /index.html;
                 }
@@ -84,7 +84,7 @@
     apiVersion: v1
     kind: Service
     metadata:
-      name: ss-web
+      name: nginx
       namespace: custom
       labels:
         app: nginx
@@ -130,7 +130,7 @@
               image: xxx.xxx.xxx/filebeat:7.5.1                              ###通过docker目录创建自己的filebeat镜像
               imagePullPolicy: Always
               volumeMounts:
-                - name: ss-web
+                - name: nginx
                   mountPath: /opt/filebeat-7.5.1-linux-x86_64/filebeat.yml
                   subPath: filebeat.yml
                 - name: app-logs
@@ -143,14 +143,14 @@
                 limits:
                   memory: "30Mi"
                   cpu: "50m"
-            - name: ss-web
+            - name: nginx
               image: xxx.xxx.xxx/nginx:1.16.1                                 ###因为习惯centos，就自己用centos做个nginx镜像
               imagePullPolicy: Always 
               ports:
                 - protocol: TCP
                   containerPort: 80
               volumeMounts:
-                - name: ss-web
+                - name: nginx
                   mountPath: /etc/nginx/nginx.conf
                   subPath: nginx.conf
                 - name: app-logs
